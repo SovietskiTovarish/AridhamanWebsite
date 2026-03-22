@@ -27,12 +27,12 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 16px 40px;
-    background: var(--primary);
-    border-bottom: 1px solid rgba(215,161,0,0.15);
+    background: var(--bg-light);
+    border-bottom: 1px solid rgba(4,17,57,0.08);
 }
 
 body.dark-mode header {
-    background: #0b1328;
+    background: var(--bg-dark);
     border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -56,14 +56,18 @@ body.dark-mode header {
 }
 
 .logo-text {
-    color: var(--accent);
+    color: var(--primary);
     font-size: 18px;
     font-weight: bold;
     transition: color 0.3s ease;
 }
 
+body.dark-mode .logo-text {
+    color: var(--accent);
+}
+
 .logo-container:hover .logo-text {
-    color: white;
+    color: var(--accent);
 }
 
 nav {
@@ -73,9 +77,13 @@ nav {
 
 nav a {
     text-decoration: none;
-    color: white;
+    color: var(--primary);
     font-size: 14px;
     transition: color 0.3s ease, transform 0.3s ease;
+}
+
+body.dark-mode nav a {
+    color: white;
 }
 
 nav a:hover {
@@ -119,10 +127,12 @@ p {
 footer {
     text-align: center;
     padding: 20px;
+    background: var(--bg-light);
     border-top: 1px solid rgba(4,17,57,0.08);
 }
 
 body.dark-mode footer {
+    background: var(--bg-dark);
     border-top: 1px solid rgba(255,255,255,0.08);
 }
 
