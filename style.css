@@ -26,15 +26,10 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 50px;
+    padding: 16px 40px;
     background: rgba(255,255,255,0.5);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid rgba(4,17,57,0.08);
-}
-
-body.dark-mode header {
-    background: rgba(18,24,38,0.9);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .logo-container {
@@ -44,14 +39,15 @@ body.dark-mode header {
 }
 
 .logo-image {
-    height: 45px;
+    height: 28px;
     width: auto;
-    margin-right: 12px;
+    max-width: 28px;
+    margin-right: 10px;
 }
 
 .logo-text {
     color: var(--primary);
-    font-size: 22px;
+    font-size: 18px;
     font-weight: bold;
 }
 
