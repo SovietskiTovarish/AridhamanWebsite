@@ -28,12 +28,10 @@ header {
     align-items: center;
     padding: 16px 40px;
     background: var(--bg-light);
-    border-bottom: 1px solid rgba(4,17,57,0.08);
 }
 
 body.dark-mode header {
     background: var(--bg-dark);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .logo-container {
@@ -93,7 +91,7 @@ nav a:hover {
 
 main {
     min-height: 80vh;
-    padding: 80px 50px;
+    padding: 90px 50px;
     max-width: 900px;
 }
 
@@ -128,12 +126,10 @@ footer {
     text-align: center;
     padding: 20px;
     background: var(--bg-light);
-    border-top: 1px solid rgba(4,17,57,0.08);
 }
 
 body.dark-mode footer {
     background: var(--bg-dark);
-    border-top: 1px solid rgba(255,255,255,0.08);
 }
 
 .social-links {
