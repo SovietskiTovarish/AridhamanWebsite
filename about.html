@@ -3,83 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us</title>
+    <title>About Us — Aridhaman</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-     <a href="index.html" class="logo-container">
-        <img src="logo.png" class="logo-image" alt="Company Logo">
+    <a href="index.html" class="logo-container">
+        <img src="logo.png" class="logo-image" alt="Aridhaman logo">
         <div class="logo-text">Aridhaman</div>
     </a>
-    </div>
 
     <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About Us</a>
-    <a href="careers.html">Careers</a>
-    <a href="contact.html">Contact Us</a>
-</nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="updates.html">Updates</a>
+        <a href="careers.html">Careers</a>
+        <a href="contact.html">Contact Us</a>
+    </nav>
 
-    <button class="toggle-btn" onclick="toggleMode()">Mode</button>
+    <button class="toggle-btn" onclick="toggleMode()" aria-label="Toggle dark mode">Dark / Light</button>
 </header>
 
 <main>
-    <h1>About Us</h1>
-
-  We are an organisation engaged in research and development across selected areas of technologies with cross-domain application potential, with an interest in forms of technical work that respond to evolving practical requirements while remaining attentive to the broader systems within which such technologies are conceived, developed, and applied.</p>
-<p>
-Our work draws on technical inquiry, design, and interdisciplinary thinking as a means of shaping solutions that are intended not only to address immediate questions of utility, but also to remain adaptable to changing contexts over time.</p>
-<p>
-Current efforts are directed toward establishing long-term areas of work, refining developmental priorities, and building the institutional and technical foundations necessary for sustained contribution.
-</p>
+    <h1 id="about-title"></h1>
+    <p id="about-p1"></p>
+    <p id="about-p2"></p>
+    <p id="about-p3"></p>
 </main>
 
 <footer>
     <div class="social-links">
-
-        <a href="https://x.com/AridhamanLLP" target="_blank" aria-label="X">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M18.9 2H21l-6.8 7.8L22 22h-6.3l-4.9-6.4L4.9 22H2.8l7.3-8.4L2 2h6.4l4.4 5.8L18.9 2z"/>
-            </svg>
+        <a href="https://x.com/AridhamanLLP" target="_blank" rel="noopener" aria-label="X (Twitter)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.9 2H21l-6.8 7.8L22 22h-6.3l-4.9-6.4L4.9 22H2.8l7.3-8.4L2 2h6.4l4.4 5.8L18.9 2z"/></svg>
         </a>
-
-        <a href="https://instagram.com/aridhamanllp" target="_blank" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6-.8a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/>
-            </svg>
+        <a href="https://instagram.com/aridhamanllp" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6-.8a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg>
         </a>
-
-        <a href="https://linkedin.com/company/aridhaman-llp" target="_blank" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M4.98 3.5A2.48 2.48 0 1 0 5 8.46 2.48 2.48 0 0 0 4.98 3.5zM3 9h4v12H3zm7 0h3.8v1.7h.1c.5-.9 1.8-1.9 3.7-1.9 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/>
-            </svg>
+        <a href="https://linkedin.com/company/aridhaman-llp" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M4.98 3.5A2.48 2.48 0 1 0 5 8.46 2.48 2.48 0 0 0 4.98 3.5zM3 9h4v12H3zm7 0h3.8v1.7h.1c.5-.9 1.8-1.9 3.7-1.9 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg>
         </a>
-
     </div>
-
-    <p>© 2026 Your Company Name</p>
+    <p>© 2026 Aridhaman LLP</p>
 </footer>
 
+<script src="content.js"></script>
 <script>
 function toggleMode() {
     document.body.classList.toggle('dark-mode');
-
-    if (document.body.classList.contains('dark-mode')) {
-        localStorage.setItem('theme', 'dark');
-    } else {
-        localStorage.setItem('theme', 'light');
-    }
+    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
 }
-
-window.onload = function() {
-    const savedTheme = localStorage.getItem('theme');
-
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-    }
-}
+window.onload = function () {
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+    const c = getContent('about');
+    document.getElementById('about-title').textContent = c.title;
+    document.getElementById('about-p1').textContent = c.p1;
+    document.getElementById('about-p2').textContent = c.p2;
+    document.getElementById('about-p3').textContent = c.p3;
+};
 </script>
 
 </body>
