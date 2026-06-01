@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aridhaman — Admin</title>
+<style>
+/* ── Variables ──────────────────────────────── */
+:root {
+  --primary:  #041139;
+  --accent:   #d7a100;
+  --bg:       #f4f1ea;
+  --surface:  #ffffff;
+  --border:   rgba(4,17,57,0.12);
+  --text:     #222;
+  --muted:    #666;
+  --success:  #2d7d46;
+  --danger:   #c0392b;
+  --sidebar-w: 220px;
+}
+
+/* ── Reset ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Georgia', serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── Layout ─────────────────────────────────── */
+#app { display: flex; height: 100vh; overflow: hidden; }
+
+/* ── Login Screen ───────────────────────────── */
+#login-screen {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--primary);
+  z-index: 100;
+}
+.login-box {
+  background: var(--bg);
+  padding: 48px 44px;
+  width: 360px;
+  max-width: 90vw;
+}
+.login-box .brand {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--primary);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.login-box .brand span { color: var(--accent); }
+.login-box .subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 32px;
+  font-style: italic;
+}
+.login-box label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.login-box input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 14px;
+  font-family: inherit;
+  margin-bottom: 18px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.login-box input:focus { border-color: var(--accent); }
+.login-box .field { margin-bottom: 0; }
+.login-error {
+  color: var(--danger);
+  font-size: 12px;
+  margin-top: -10px;
+  margin-bottom: 16px;
+  display: none;
+}
+.btn-primary {
+  width: 100%;
+  padding: 11px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: #0a1f5c; }
+
+/* ── Sidebar ─────────────────────────────────── */
+#sidebar {
+  width: var(--sidebar-w);
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+.sidebar-brand {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.sidebar-brand .name {
+  font-size: 17px;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+}
+.sidebar-brand .name span { color: var(--accent); }
+.sidebar-brand .role-badge {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  opacity: 0.85;
+}
+.sidebar-nav { flex: 1; padding: 16px 0; }
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 24px;
+  color: rgba(255,255,255,0.65);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+  user-select: none;
+}
+.nav-item:hover { color: #fff; background: rgba(255,255,255,0.06); }
+.nav-item.active {
+  color: var(--accent);
+  background: rgba(215,161,0,0.1);
+  border-left-color: var(--accent);
+}
+.nav-item svg { opacity: 0.7; flex-shrink: 0; }
+.nav-item.active svg { opacity: 1; }
+.sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.logout-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.6);
+  padding: 8px 14px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+.logout-btn:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+
+/* ── Main content ────────────────────────────── */
+#main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 48px;
+  max-width: 860px;
+}
+
+/* ── Section header ─────────────────────────── */
+.section-title {
+  font-size: 22px;
+  color: var(--primary);
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+.section-desc {
+  color: var(--muted);
+  font-size: 13px;
+  font-style: italic;
+  margin-bottom: 32px;
+}
+.divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+/* ── Form elements ───────────────────────────── */
+.field { margin-bottom: 22px; }
+.field label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.field input, .field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 14px;
+  font-family: 'Georgia', serif;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: vertical;
+}
+.field input:focus, .field textarea:focus { border-color: var(--accent); }
+.field textarea { min-height: 100px; }
+
+.save-btn {
+  padding: 10px 26px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background 0.2s;
+}
+.save-btn:hover { background: #0a1f5c; }
+.save-msg {
+  display: inline-block;
+  margin-left: 14px;
+  color: var(--success);
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.save-msg.show { opacity: 1; }
+
+/* ── Dashboard cards ────────────────────────── */
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.dash-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 22px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.dash-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.dash-card .icon { font-size: 22px; margin-bottom: 10px; }
+.dash-card .label { font-size: 13px; color: var(--muted); }
+.dash-card .value { font-size: 20px; font-weight: bold; color: var(--primary); margin-top: 2px; }
+
+/* ── Jobs list ────────────────────────────────── */
+.job-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.job-item-info { flex: 1; min-width: 0; }
+.job-item-info h4 { font-size: 14px; color: var(--primary); margin-bottom: 2px; }
+.job-item-info .job-loc { font-size: 12px; color: var(--muted); }
+.job-item-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  border: 1px solid;
+  margin-right: 6px;
+}
+.tag-published { color: var(--success); border-color: var(--success); }
+.tag-draft { color: var(--muted); border-color: currentColor; }
+
+.btn-sm {
+  padding: 5px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid;
+  background: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-edit { border-color: var(--primary); color: var(--primary); }
+.btn-edit:hover { background: var(--primary); color: #fff; }
+.btn-delete { border-color: var(--danger); color: var(--danger); }
+.btn-delete:hover { background: var(--danger); color: #fff; }
+.btn-toggle-pub { border-color: var(--accent); color: var(--accent); }
+.btn-toggle-pub:hover { background: var(--accent); color: var(--primary); }
+
+.add-job-btn {
+  padding: 10px 22px;
+  background: none;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+}
+.add-job-btn:hover { background: var(--primary); color: #fff; }
+
+/* ── Modal overlay ───────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(4,17,57,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--bg);
+  padding: 36px 40px;
+  width: 560px;
+  max-width: 94vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-title {
+  font-size: 18px;
+  color: var(--primary);
+  margin-bottom: 24px;
+  font-weight: bold;
+}
+.modal-actions { display: flex; gap: 12px; margin-top: 24px; }
+.btn-cancel {
+  padding: 9px 20px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-cancel:hover { border-color: var(--text); color: var(--text); }
+
+/* ── Audit log ───────────────────────────────── */
+.audit-entry {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+}
+.audit-time { color: var(--muted); white-space: nowrap; font-size: 11px; width: 120px; flex-shrink: 0; }
+.audit-msg { flex: 1; }
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 700px) {
+  #sidebar { width: 180px; }
+  #main { padding: 28px 22px; }
+  .dash-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  #app { flex-direction: column; }
+  #sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; height: auto; }
+  #main { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="brand">ARIDHAMAN<span>.</span></div>
+    <div class="subtitle">Content Management System</div>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="login-user" autocomplete="username" placeholder="Enter username">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="login-pass" autocomplete="current-password" placeholder="Enter password">
+    </div>
+    <div class="login-error" id="login-error">Invalid credentials. Please try again.</div>
+    <button class="btn-primary" onclick="doLogin()">Sign In</button>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="app" style="display:none">
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <div class="name">ARIDHAMAN<span>.</span></div>
+      <div class="role-badge" id="role-badge">—</div>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <!-- injected by JS based on role -->
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="main">
+    <!-- panels injected here -->
+  </main>
+</div>
+
+<!-- JOB MODAL -->
+<div class="modal-overlay" id="job-modal">
+  <div class="modal">
+    <div class="modal-title" id="job-modal-title">Add Job Posting</div>
+    <div class="field"><label>Job Title</label><input type="text" id="jm-title" placeholder="e.g. Research Associate"></div>
+    <div class="field"><label>Location</label><input type="text" id="jm-location" placeholder="e.g. Remote / New Delhi"></div>
+    <div class="field"><label>Description</label><textarea id="jm-desc" rows="5" placeholder="Role overview, responsibilities, requirements..."></textarea></div>
+    <div class="field"><label>Apply Link (optional)</label><input type="url" id="jm-link" placeholder="https://..."></div>
+    <div class="field" style="display:flex;align-items:center;gap:10px;">
+      <input type="checkbox" id="jm-published" style="width:auto;margin:0">
+      <label for="jm-published" style="text-transform:none;font-size:13px;letter-spacing:0;color:var(--text)">Publish immediately</label>
+    </div>
+    <div class="modal-actions">
+      <button class="save-btn" onclick="saveJob()">Save Posting</button>
+      <button class="btn-cancel" onclick="closeJobModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="content.js"></script>
+<script>
+// ─── ACCOUNTS ─────────────────────────────────────────────────────────────────
+// Credentials stored here for a static site.
+// In production these should be server-side — but this is a fully static site.
+const ACCOUNTS = {
+  master:   { password: 'master123',   role: 'master_editor',   label: 'Master Editor'   },
+  homeboss: { password: 'home456',     role: 'home_editor',     label: 'Home Editor'     },
+  blogger:  { password: 'blog789',     role: 'blog_editor',     label: 'Updates Editor'     },
+  careers:  { password: 'careers321',  role: 'careers_editor',  label: 'Careers Editor'  },
+};
+
+const PERMISSIONS = {
+  home_editor:    ['home'],
+  blog_editor:    ['blog'],
+  careers_editor: ['careers'],
+  master_editor:  ['home', 'blog', 'careers'],
+};
+
+const NAV_ITEMS = {
+  home:    { label: 'Homepage',  icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>' },
+  blog:    { label: 'Updates',      icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' },
+  careers: { label: 'Careers',   icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>' },
+};
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let currentUser = null;
+let currentSection = null;
+let editingJobId = null;
+
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+function doLogin() {
+  const username = document.getElementById('login-user').value.trim().toLowerCase();
+  const password = document.getElementById('login-pass').value;
+  const account = ACCOUNTS[username];
+  if (!account || account.password !== password) {
+    document.getElementById('login-error').style.display = 'block';
+    return;
+  }
+  document.getElementById('login-error').style.display = 'none';
+  currentUser = { username, ...account };
+  localStorage.setItem('aridhaman_admin_session', JSON.stringify(currentUser));
+  showApp();
+}
+
+document.getElementById('login-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+function doLogout() {
+  currentUser = null;
+  localStorage.removeItem('aridhaman_admin_session');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('role-badge').textContent = currentUser.label;
+  buildSidebar();
+  const sections = PERMISSIONS[currentUser.role];
+  navigate(sections[0]);
+}
+
+// ─── SIDEBAR ──────────────────────────────────────────────────────────────────
+function buildSidebar() {
+  const nav = document.getElementById('sidebar-nav');
+  const sections = PERMISSIONS[currentUser.role];
+  nav.innerHTML = '';
+  // Dashboard always visible
+  nav.innerHTML += `<div class="nav-item" id="nav-dashboard" onclick="navigate('dashboard')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    Dashboard
+  </div>`;
+  sections.forEach(s => {
+    const item = NAV_ITEMS[s];
+    nav.innerHTML += `<div class="nav-item" id="nav-${s}" onclick="navigate('${s}')">${item.icon}${item.label}</div>`;
+  });
+  nav.innerHTML += `<div class="nav-item" id="nav-log" onclick="navigate('log')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Audit Log
+  </div>`;
+}
+
+function navigate(section) {
+  currentSection = section;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const active = document.getElementById('nav-' + section);
+  if (active) active.classList.add('active');
+  const main = document.getElementById('main');
+  if (section === 'dashboard') main.innerHTML = renderDashboard();
+  else if (section === 'home') main.innerHTML = renderHomeEditor();
+  else if (section === 'blog') main.innerHTML = renderBlogEditor();
+  else if (section === 'careers') main.innerHTML = renderCareersEditor();
+  else if (section === 'log') main.innerHTML = renderAuditLog();
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────────────────────
+function renderDashboard() {
+  const sections = PERMISSIONS[currentUser.role];
+  const jobs = (getContent('careers').jobs || []);
+  const publishedJobs = jobs.filter(j => j.published).length;
+
+  let cards = '';
+  if (sections.includes('home')) cards += `
+    <div class="dash-card" onclick="navigate('home')">
+      <div class="icon">🏠</div>
+      <div class="label">Homepage</div>
+      <div class="value">Live</div>
+    </div>`;
+  if (sections.includes('blog')) cards += `
+    <div class="dash-card" onclick="navigate('blog')">
+      <div class="icon">✍️</div>
+      <div class="label">Updates</div>
+      <div class="value">${(getContent('blog_posts')||[]).length}</div>
+    </div>`;
+  if (sections.includes('careers')) cards += `
+    <div class="dash-card" onclick="navigate('careers')">
+      <div class="icon">💼</div>
+      <div class="label">Active Jobs</div>
+      <div class="value">${publishedJobs}</div>
+    </div>`;
+
+  return `
+    <div class="section-title">Dashboard</div>
+    <div class="section-desc">Welcome back, ${currentUser.label}.</div>
+    <div class="dash-grid">${cards}</div>
+    <div class="divider"></div>
+    <p style="color:var(--muted);font-size:13px;font-style:italic">Use the sidebar to navigate to your sections.</p>
+  `;
+}
+
+// ─── HOME EDITOR ──────────────────────────────────────────────────────────────
+function renderHomeEditor() {
+  const c = getContent('home');
+  return `
+    <div class="section-title">Homepage</div>
+    <div class="section-desc">Edit the hero text shown on the public homepage.</div>
+    <div class="field">
+      <label>Hero Headline</label>
+      <input type="text" id="he-title" value="${escAttr(c.hero_title)}">
+    </div>
+    <div class="field">
+      <label>Hero Body Text</label>
+      <textarea id="he-body" rows="4">${escText(c.hero_body)}</textarea>
+    </div>
+    <button class="save-btn" onclick="saveHome()">Save Changes</button>
+    <span class="save-msg" id="home-save-msg">✓ Saved</span>
+    <div class="divider"></div>
+    <p style="font-size:12px;color:var(--muted)">Changes are reflected immediately on the public homepage.</p>
+  `;
+}
+function saveHome() {
+  const data = {
+    hero_title: document.getElementById('he-title').value,
+    hero_body:  document.getElementById('he-body').value,
+  };
+  localStorage.setItem('aridhaman_content_home', JSON.stringify(data));
+  addAuditLog('Updated homepage content');
+  flashSave('home-save-msg');
+}
+
+// ─── BLOG EDITOR ─────────────────────────────────────────────────────────────
+function getBlogPosts() {
+  try { return JSON.parse(localStorage.getItem('aridhaman_blog_posts') || '[]'); } catch(e) { return []; }
+}
+function saveBlogPosts(posts) {
+  localStorage.setItem('aridhaman_blog_posts', JSON.stringify(posts));
+}
+
+function renderBlogEditor() {
+  const posts = getBlogPosts();
+  let list = '';
+  if (posts.length === 0) {
+    list = '<p style="color:var(--muted);font-style:italic;font-size:13px">No updates yet.</p>';
+  } else {
+    list = posts.map(p => `
+      <div class="job-item">
+        <div class="job-item-info">
+          <h4>${escHtml(p.title)}</h4>
+          <div class="job-loc">${escHtml(p.date)}  ·  ${escHtml(p.excerpt||'').substring(0,80)}${(p.excerpt||'').length > 80 ? '…' : ''}</div>
+          <div style="margin-top:6px">
+            <span class="tag ${p.published ? 'tag-published' : 'tag-draft'}">${p.published ? 'Published' : 'Draft'}</span>
+          </div>
+        </div>
+        <div class="job-item-actions">
+          <button class="btn-sm btn-edit" onclick="editBlogPost('${p.id}')">Edit</button>
+          <button class="btn-sm btn-toggle-pub" onclick="toggleBlogPost('${p.id}')">${p.published ? 'Unpublish' : 'Publish'}</button>
+          <button class="btn-sm btn-delete" onclick="deleteBlogPost('${p.id}')">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  return `
+    <div class="section-title">Updates</div>
+    <div class="section-desc">Manage updates and announcements.</div>
+    <button class="add-job-btn" onclick="openBlogModal(null)">+ New Update</button>
+    <div id="blog-list">${list}</div>
+  `;
+}
+
+function openBlogModal(id) {
+  editingJobId = id;
+  const posts = getBlogPosts();
+  const p = id ? posts.find(x => x.id === id) : null;
+  const modal = document.getElementById('job-modal');
+  document.getElementById('job-modal-title').textContent = p ? 'Edit Update' : 'New Update';
+  document.getElementById('jm-title').placeholder = 'Post title';
+  document.getElementById('jm-location').placeholder = 'Author name';
+  document.querySelector('label[for="jm-location"]') && null;
+  // Reuse job modal fields creatively
+  document.getElementById('jm-title').value = p ? p.title : '';
+  document.getElementById('jm-location').value = p ? (p.author||'') : '';
+  document.getElementById('jm-desc').value = p ? (p.excerpt||'') : '';
+  document.getElementById('jm-link').value = p ? (p.link||'') : '';
+  document.getElementById('jm-published').checked = p ? !!p.published : false;
+
+  // Patch labels for blog context
+  document.querySelectorAll('#job-modal .field label')[0].textContent = 'Post Title';
+  document.querySelectorAll('#job-modal .field label')[1].textContent = 'Author';
+  document.querySelectorAll('#job-modal .field label')[2].textContent = 'Content / Excerpt';
+  document.querySelectorAll('#job-modal .field label')[3].textContent = 'Link / URL (optional)';
+  document.getElementById('job-modal-title').textContent = p ? 'Edit Update' : 'New Update';
+  modal.classList.add('open');
+  // Patch save button
+  document.querySelector('#job-modal .save-btn').onclick = saveBlogPost;
+}
+
+function saveBlogPost() {
+  const posts = getBlogPosts();
+  const id = editingJobId;
+  const entry = {
+    id: id || ('bp_' + Date.now()),
+    title: document.getElementById('jm-title').value,
+    author: document.getElementById('jm-location').value,
+    excerpt: document.getElementById('jm-desc').value,
+    link: document.getElementById('jm-link').value,
+    published: document.getElementById('jm-published').checked,
+    date: id ? (posts.find(x=>x.id===id)||{}).date || todayStr() : todayStr(),
+  };
+  if (id) {
+    const i = posts.findIndex(x => x.id === id);
+    if (i >= 0) posts[i] = entry;
+  } else {
+    posts.unshift(entry);
+  }
+  saveBlogPosts(posts);
+  addAuditLog((id ? 'Updated' : 'Created') + ' update: ' + entry.title);
+  closeJobModal();
+  navigate('blog');
+}
+
+function toggleBlogPost(id) {
+  const posts = getBlogPosts();
+  const i = posts.findIndex(x => x.id === id);
+  if (i >= 0) { posts[i].published = !posts[i].published; saveBlogPosts(posts); addAuditLog((posts[i].published?'Published':'Unpublished') + ' post: ' + posts[i].title); }
+  navigate('blog');
+}
+function deleteBlogPost(id) {
+  if (!confirm('Delete this post?')) return;
+  const posts = getBlogPosts().filter(x => x.id !== id);
+  saveBlogPosts(posts);
+  addAuditLog('Deleted update id:' + id);
+  navigate('blog');
+}
+function editBlogPost(id) { openBlogModal(id); }
+
+// ─── CAREERS EDITOR ──────────────────────────────────────────────────────────
+function renderCareersEditor() {
+  const c = getContent('careers');
+  const jobs = c.jobs || [];
+  let jobList = '';
+  if (jobs.length === 0) {
+    jobList = '<p style="color:var(--muted);font-style:italic;font-size:13px">No job postings yet.</p>';
+  } else {
+    jobList = jobs.map(j => `
+      <div class="job-item">
+        <div class="job-item-info">
+          <h4>${escHtml(j.title)}</h4>
+          <div class="job-loc">${escHtml(j.location)}</div>
+          <div style="margin-top:6px">
+            <span class="tag ${j.published ? 'tag-published' : 'tag-draft'}">${j.published ? 'Published' : 'Draft'}</span>
+          </div>
+        </div>
+        <div class="job-item-actions">
+          <button class="btn-sm btn-edit" onclick="openJobModal('${j.id}')">Edit</button>
+          <button class="btn-sm btn-toggle-pub" onclick="toggleJob('${j.id}')">${j.published ? 'Unpublish' : 'Publish'}</button>
+          <button class="btn-sm btn-delete" onclick="deleteJob('${j.id}')">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  return `
+    <div class="section-title">Careers</div>
+    <div class="section-desc">Manage job postings and the careers page text.</div>
+
+    <div class="field"><label>Page Intro</label><textarea id="car-intro" rows="2">${escText(c.intro)}</textarea></div>
+    <div class="field"><label>Body Text</label><textarea id="car-body" rows="3">${escText(c.body)}</textarea></div>
+    <div class="field"><label>Contact Note</label><input type="text" id="car-cnote" value="${escAttr(c.contact_note)}"></div>
+    <div class="field"><label>Contact Email</label><input type="email" id="car-email" value="${escAttr(c.contact_email)}"></div>
+    <button class="save-btn" onclick="saveCareersText()">Save Page Text</button>
+    <span class="save-msg" id="careers-save-msg">✓ Saved</span>
+
+    <div class="divider"></div>
+    <div class="section-title" style="font-size:17px;margin-bottom:4px">Job Postings</div>
+    <div class="section-desc" style="margin-bottom:20px">Only published postings appear on the public site.</div>
+    <button class="add-job-btn" onclick="openJobModal(null)">+ Add Posting</button>
+    <div id="job-list">${jobList}</div>
+  `;
+}
+
+function saveCareersText() {
+  const c = getContent('careers');
+  const data = {
+    ...c,
+    intro: document.getElementById('car-intro').value,
+    body: document.getElementById('car-body').value,
+    contact_note: document.getElementById('car-cnote').value,
+    contact_email: document.getElementById('car-email').value,
+  };
+  localStorage.setItem('aridhaman_content_careers', JSON.stringify(data));
+  addAuditLog('Updated careers page text');
+  flashSave('careers-save-msg');
+}
+
+function openJobModal(id) {
+  editingJobId = id;
+  const jobs = getContent('careers').jobs || [];
+  const j = id ? jobs.find(x => x.id === id) : null;
+  // Reset labels for job context
+  document.querySelectorAll('#job-modal .field label')[0].textContent = 'Job Title';
+  document.querySelectorAll('#job-modal .field label')[1].textContent = 'Location';
+  document.querySelectorAll('#job-modal .field label')[2].textContent = 'Description';
+  document.querySelectorAll('#job-modal .field label')[3].textContent = 'Apply Link (optional)';
+  document.getElementById('job-modal-title').textContent = j ? 'Edit Job Posting' : 'Add Job Posting';
+  document.getElementById('jm-title').value = j ? j.title : '';
+  document.getElementById('jm-location').value = j ? j.location : '';
+  document.getElementById('jm-desc').value = j ? j.description : '';
+  document.getElementById('jm-link').value = j ? (j.apply_link||'') : '';
+  document.getElementById('jm-published').checked = j ? !!j.published : false;
+  document.querySelector('#job-modal .save-btn').onclick = saveJob;
+  document.getElementById('job-modal').classList.add('open');
+}
+
+function saveJob() {
+  const c = getContent('careers');
+  const jobs = c.jobs || [];
+  const id = editingJobId;
+  const entry = {
+    id: id || ('job_' + Date.now()),
+    title: document.getElementById('jm-title').value,
+    location: document.getElementById('jm-location').value,
+    description: document.getElementById('jm-desc').value,
+    apply_link: document.getElementById('jm-link').value,
+    published: document.getElementById('jm-published').checked,
+  };
+  if (id) {
+    const i = jobs.findIndex(x => x.id === id);
+    if (i >= 0) jobs[i] = entry;
+  } else {
+    jobs.push(entry);
+  }
+  localStorage.setItem('aridhaman_content_careers', JSON.stringify({...c, jobs}));
+  addAuditLog((id ? 'Updated' : 'Added') + ' job posting: ' + entry.title);
+  closeJobModal();
+  navigate('careers');
+}
+
+function toggleJob(id) {
+  const c = getContent('careers');
+  const jobs = c.jobs || [];
+  const i = jobs.findIndex(x => x.id === id);
+  if (i >= 0) { jobs[i].published = !jobs[i].published; localStorage.setItem('aridhaman_content_careers', JSON.stringify({...c, jobs})); addAuditLog((jobs[i].published?'Published':'Unpublished')+' job: '+jobs[i].title); }
+  navigate('careers');
+}
+function deleteJob(id) {
+  if (!confirm('Delete this posting?')) return;
+  const c = getContent('careers');
+  const jobs = (c.jobs||[]).filter(x => x.id !== id);
+  localStorage.setItem('aridhaman_content_careers', JSON.stringify({...c, jobs}));
+  addAuditLog('Deleted job id:' + id);
+  navigate('careers');
+}
+
+function closeJobModal() {
+  document.getElementById('job-modal').classList.remove('open');
+  editingJobId = null;
+}
+document.getElementById('job-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeJobModal();
+});
+
+// ─── AUDIT LOG ────────────────────────────────────────────────────────────────
+function addAuditLog(msg) {
+  try {
+    const log = JSON.parse(localStorage.getItem('aridhaman_audit_log') || '[]');
+    log.unshift({ ts: new Date().toISOString(), user: currentUser.username, msg });
+    if (log.length > 200) log.length = 200;
+    localStorage.setItem('aridhaman_audit_log', JSON.stringify(log));
+  } catch(e) {}
+}
+
+function renderAuditLog() {
+  const log = JSON.parse(localStorage.getItem('aridhaman_audit_log') || '[]');
+  const entries = log.length === 0
+    ? '<p style="color:var(--muted);font-style:italic;font-size:13px">No activity recorded yet.</p>'
+    : log.map(e => `
+        <div class="audit-entry">
+          <div class="audit-time">${formatTs(e.ts)}<br><span style="opacity:0.7">${escHtml(e.user)}</span></div>
+          <div class="audit-msg">${escHtml(e.msg)}</div>
+        </div>
+      `).join('');
+  return `
+    <div class="section-title">Audit Log</div>
+    <div class="section-desc">Recent content changes by all editors.</div>
+    <div id="audit-entries">${entries}</div>
+  `;
+}
+
+function formatTs(iso) {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'}) + '<br>' +
+           d.toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'});
+  } catch(e) { return iso; }
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+function escText(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function todayStr() { return new Date().toISOString().split('T')[0]; }
+
+function flashSave(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ─── AUTO-RESTORE SESSION ─────────────────────────────────────────────────────
+(function() {
+  try {
+    const sess = JSON.parse(localStorage.getItem('aridhaman_admin_session') || 'null');
+    if (sess && ACCOUNTS[sess.username] && ACCOUNTS[sess.username].role === sess.role) {
+      currentUser = sess;
+      showApp();
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
