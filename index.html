@@ -3,77 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Company Name</title>
+    <title>Aridhaman</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
     <a href="index.html" class="logo-container">
-        <img src="logo.png" class="logo-image" alt="Company Logo">
+        <img src="logo.png" class="logo-image" alt="Aridhaman logo">
         <div class="logo-text">Aridhaman</div>
     </a>
-
     <nav>
         <a href="index.html">Home</a>
         <a href="about.html">About Us</a>
+        <a href="updates.html">Updates</a>
         <a href="careers.html">Careers</a>
         <a href="contact.html">Contact Us</a>
     </nav>
-
-    <button class="toggle-btn" onclick="toggleMode()">Mode</button>
+    <button class="toggle-btn" onclick="toggleMode()" aria-label="Toggle dark mode">Dark / Light</button>
 </header>
 
 <main>
-    <h1>Building something special. For the nation. </h1>
-    <p>
-        The website shall be updated with news regarding the company.
-    </p>
+    <h1 id="hero-title"></h1>
+    <p id="hero-body"></p>
 </main>
+
+<!-- Feed section scrolls below hero -->
+<section class="feed-section">
+
+    <!-- Updates feed -->
+    <div class="feed-section-header">
+        <h2>Latest Updates</h2>
+        <a href="updates.html">View all →</a>
+    </div>
+    <div class="feed-grid" id="updates-feed">
+        <div class="feed-empty">No updates yet.</div>
+    </div>
+
+    <!-- Open roles feed -->
+    <div class="feed-section-header">
+        <h2>Open Roles</h2>
+        <a href="careers.html">View all →</a>
+    </div>
+    <div class="feed-grid" id="jobs-feed">
+        <div class="feed-empty">No open roles at this time.</div>
+    </div>
+
+</section>
 
 <footer>
     <div class="social-links">
-
-         <a href="https://x.com/AridhamanLLP" target="_blank" aria-label="X">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M18.9 2H21l-6.8 7.8L22 22h-6.3l-4.9-6.4L4.9 22H2.8l7.3-8.4L2 2h6.4l4.4 5.8L18.9 2z"/>
-            </svg>
+        <a href="https://x.com/AridhamanLLP" target="_blank" rel="noopener" aria-label="X (Twitter)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.9 2H21l-6.8 7.8L22 22h-6.3l-4.9-6.4L4.9 22H2.8l7.3-8.4L2 2h6.4l4.4 5.8L18.9 2z"/></svg>
         </a>
-
-        <a href="https://instagram.com/aridhamanllp" target="_blank" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6-.8a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/>
-            </svg>
+        <a href="https://instagram.com/aridhamanllp" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6-.8a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg>
         </a>
-
-        <a href="https://linkedin.com/company/aridhaman-llp" target="_blank" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                <path d="M4.98 3.5A2.48 2.48 0 1 0 5 8.46 2.48 2.48 0 0 0 4.98 3.5zM3 9h4v12H3zm7 0h3.8v1.7h.1c.5-.9 1.8-1.9 3.7-1.9 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/>
-            </svg>
+        <a href="https://linkedin.com/company/aridhaman-llp" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M4.98 3.5A2.48 2.48 0 1 0 5 8.46 2.48 2.48 0 0 0 4.98 3.5zM3 9h4v12H3zm7 0h3.8v1.7h.1c.5-.9 1.8-1.9 3.7-1.9 4 0 4.7 2.6 4.7 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4z"/></svg>
         </a>
-
     </div>
-
     <p>© 2026 Aridhaman LLP</p>
 </footer>
+
+<script src="content.js"></script>
 <script>
 function toggleMode() {
     document.body.classList.toggle('dark-mode');
-
-    if (document.body.classList.contains('dark-mode')) {
-        localStorage.setItem('theme', 'dark');
-    } else {
-        localStorage.setItem('theme', 'light');
-    }
+    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
 }
 
-window.onload = function() {
-    const savedTheme = localStorage.getItem('theme');
-
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-    }
+function escHtml(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
+function formatDate(iso) {
+    if (!iso) return '';
+    try {
+        return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    } catch(e) { return iso; }
+}
+
+window.onload = function () {
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+
+    // Hero
+    const c = getContent('home');
+    document.getElementById('hero-title').textContent = c.hero_title;
+    document.getElementById('hero-body').textContent = c.hero_body;
+
+    // Updates feed — latest 3 published
+    const posts = JSON.parse(localStorage.getItem('aridhaman_blog_posts') || '[]')
+        .filter(p => p.published)
+        .slice(0, 3);
+
+    const updatesFeed = document.getElementById('updates-feed');
+    if (posts.length > 0) {
+        updatesFeed.innerHTML = posts.map(p => `
+            <a class="feed-card" href="${p.link ? escHtml(p.link) : 'updates.html'}" ${p.link ? 'target="_blank" rel="noopener"' : ''}>
+                <div class="feed-card-label">Update</div>
+                <div class="feed-card-title">${escHtml(p.title)}</div>
+                <div class="feed-card-meta">${formatDate(p.date)}${p.author ? ' · ' + escHtml(p.author) : ''}</div>
+            </a>
+        `).join('');
+    }
+
+    // Jobs feed — all published
+    const careers = getContent('careers');
+    const jobs = (careers.jobs || []).filter(j => j.published).slice(0, 3);
+
+    const jobsFeed = document.getElementById('jobs-feed');
+    if (jobs.length > 0) {
+        jobsFeed.innerHTML = jobs.map(j => `
+            <a class="feed-card" href="careers.html">
+                <div class="feed-card-label">Open Role</div>
+                <div class="feed-card-title">${escHtml(j.title)}</div>
+                <div class="feed-card-meta">${escHtml(j.location)}</div>
+            </a>
+        `).join('');
+    }
+};
 </script>
 
 </body>
